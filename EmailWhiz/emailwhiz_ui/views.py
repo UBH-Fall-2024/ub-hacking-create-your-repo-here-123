@@ -23,6 +23,17 @@ import json
 from emailwhiz_ui.forms import CustomUserCreationForm
 
 
+def suggestions_view(request):
+    suggestions = [
+        {"first_name": "Alice", "last_name": "Johnson", "organization_email_id": "alice.johnson@aws.com", "organization": "Amazon"},
+        {"first_name": "Bob", "last_name": "Smith", "organization_email_id": "bob.smith@aws.com", "organization": "Amazon"},
+        {"first_name": "Carol", "last_name": "Davis", "organization_email_id": "carol.davis@aws.com", "organization": "Amazon"},
+        {"first_name": "David", "last_name": "Wilson", "organization_email_id": "david.wilson@aws.com", "organization": "Amazon"},
+        {"first_name": "Eve", "last_name": "Miller", "organization_email_id": "eve.miller@aws.com", "organization": "Amazon"}
+    ]
+    
+    return render(request, 'suggestions.html', {'suggestions': suggestions})
+
 def view_user_details(request):
     details = get_user_details(request.user)
     print("Details: ", details)
