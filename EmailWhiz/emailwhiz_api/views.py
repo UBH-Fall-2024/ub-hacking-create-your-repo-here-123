@@ -81,7 +81,7 @@ def get_template(details):
     target_role=details["target_role"],
     email=details["email"],
     linkedin_url=details['linkedin_url'],
-    phone=details["phone"],
+    phone=details["phone_number"],
     recruiter_name=details["recruiter_name"],
     graduation_done=details['graduation_done'],
     degree_name=details["degree_name"])
