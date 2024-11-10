@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-semibold mb-4">Select Email Template</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="space-y-4">
+            <label for="use_gemini" class="flex items-center">
+                {{ form.use_gemini }} 
+                <span class="ml-2">Generate with Gemini</span>
+            </label>
+            {{ form.template_type.label_tag }}
+            {{ form.template_type }}
+            <label for="template_choice" class="block mt-2">Choose Template</label>
+            <select name="template_choice" class="w-full border-gray-300 rounded-md" {% if form.use_gemini.value %}disabled{% endif %}>
+                {% for choice in form.template_choice.field.choices %}
+                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Next</button>
+    </form>
+</div>
+{% endblock %}
