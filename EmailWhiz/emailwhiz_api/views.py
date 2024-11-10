@@ -65,8 +65,8 @@ def get_template(details):
     6. Email: {email}\n
     7. Linkedln Profile: {linkedin_url}\n 
     8. Phone Number: {phone}\n
-    9. Recruiter Name: {senders_name}\n
-    10. Graduation Done: {graduation_complete_boolean}\n
+    9. Recruiter Name: {recruiter_name}\n
+    10. Graduation Done: {graduation_done}\n
     11. Degree Name: {degree_name}\n
     \n
     \n
@@ -82,8 +82,8 @@ def get_template(details):
     email=details["email"],
     linkedin_url=details['linkedin_url'],
     phone=details["phone"],
-    senders_name=details["senders_name"],
-    graduation_complete_boolean=details['graduation_complete_boolean'],
+    recruiter_name=details["recruiter_name"],
+    graduation_done=details['graduation_done'],
     degree_name=details["degree_name"])
 
 
