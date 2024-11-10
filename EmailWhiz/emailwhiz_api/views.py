@@ -19,14 +19,22 @@ from django.core.mail import send_mail
 from django.core.files.storage import FileSystemStorage
 import json
 
-genai.configure(api_key='AIzaSyDwBGdGTwqP05cx5GdvuQeZ-F9whEQr1uA')
+
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 
 CustomUser = get_user_model()
 
+from dotenv import load_dotenv
+load_dotenv()
 
+api_key = os.getenv('API_KEY')
+EMAIL_USERNAME = os.getenv('EMAIL_USERNAME')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
+print("Enviroment Variables", os.getenv('API_KEY'), os.environ['EMAIL_USERNAME'], os.environ['EMAIL_PASSWORD'])
+
+genai.configure(api_key=os.environ['API_KEY'])
 # Create the model
 generation_config = {
   "temperature": 1,
@@ -295,7 +303,7 @@ def send_emails(request):
             resume_path = employer['resume_path']
             subject = f"[{name}]: Exploring {designation} Roles at {company_name}"
 
-            send_email('', '', sender_email, subject, message, resume_path)
+            send_email(os.environ['EMAIL_USERNAME'], os.environ['EMAIL_PASSWORD'], sender_email, subject, message, resume_path)
 
     print("Success")
     return HttpResponse("success")
