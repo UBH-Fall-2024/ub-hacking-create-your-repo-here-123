@@ -1,0 +1,96 @@
+Giving you my text of resume.
+Bhuvan Thirwani
+(716) 228-4256 |bhuvanth@buffalo.edu |linkedin |github |leetcode |Buffalo, NY , USA
+EDUCATION
+University at Buffalo, State University of New York Buffalo, NY , USA
+Master of Science in Computer Science & Engineering Aug 2024 - Present
+Indian Institute of Information Technology Pune Pune, India
+B.Tech in Computer Science & Engineering 2018 - 2022
+TECHNICAL SKILLS
+Technologies : AWS, Docker, Kubernetes, Apache Kafka, Flink, Grafana, Redis, Git, CI/CD, System Design, NoSQL, Machine Learning, MongoDB
+Languages : Python, Java, Javascript, Typescript, SQL, C++
+Frameworks : Flask, Nodejs, Pandas, Reactjs
+Core : Object-Oriented Design Solutions, Best Practices, Technical Documentation
+EXPERIENCE
+Member of Technical Staff-1 Euler Motors July 2022 - August 2024
+•Owns 2 AI Based Software Products & Developed pioneered feature for vehicle hardware data extraction & boosted electrical components
+testing by 500% using Computer Vision System.
+•Collaborate advanced Analytics to monitor vehicle performance and detect issues remotely via cloud Networking.
+•Developed Real-time data pipeline using Apache Kafka & Flink for processing real-time telemetry data of vehicles.
+•Created visual representations of KPIs for financiers using real-time data of 5000 EVs, resulting in improved decision-making.
+•Implemented Docker andKubernetes for projects deployment, elevating platform efficiency and scalability by 5 times.
+Software Engineer Intern Paytm Money Jan 2022 - June 2022
+•Implemented Live Feed Data of 7000 Stocks using Asynchronous NodeJS andWebsocket Technology.
+•Completed Load - testing for 100,000 customers simultaneously. Utilized Quantitative methods and Networking protocols to optimize data
+delivery and performance.
+•Reduced the Real-time stock market data latency from 400ms to 2ms using Springboot (MVC), MySQL andRedis Cache using Java - 8.
+Research Intern DRDO April 2021 - Jul 2021
+•Created Landslide Prediction Model & Landslide Susceptibility Index Map for Search and Rescue team.
+•Used Oversampling andUndersampling techniques, GRID SEARCH CV with Weighted Decision Tree model.
+•Implemented Frequency Ratio & Multi-Criteria Decision techniques for generating vulnerability map with 99% accuracy.
+PROJECTS
+Real-Time Vehicle Dashboard |Redis, Python, Flask, AWS S3, Druid DB, Amazon Kinesis July 2022 - December 2022
+•Developed a user-friendly, real-time dashboard to monitor live data for up to 10,000 vehicles simultaneously.
+•Automated generation of Excel and PDF trip reports, covering data for the past 90 days.
+•Implemented cron jobs to synchronize Redis and PostgreSQL databases, optimizing system performance.
+•Leveraged Amazon Glacier for long-term storage and retrieval of vehicle data, archiving records beyond 90 days for up to a year.
+User & Identity Access Management System |Redis, Python, Flask, React, SQL, Computer Security Jan 2024 - July 2024
+•Developed a comprehensive User & Identity Access Management System integrating users, roles, actions, resources & apps.
+•Implemented granular control over user permissions and resource access across multiple applications, utilizing Redis along with SQL for
+efficient data management for more than 10 Million Users
+Al Proctoring System using Deep Learning Techniques |Deep Learning, Flask, React.js, SQL Aug 2021 - Nov 2021
+•Designed a Web Application for conducting online exams with 15+ features for Students and Professors.
+•Performed Eye Tracking, Face Authentication & Security, Head Movement Tracking, Mobile Phone Detection, Multiple Person Detection,
+Tab/ Window Switching & V oice Detection to monitor 1000 Students simultaneously.
+•Composed a Research Paper : Proctoring System using DL Techniques in AIRHS 22 Conference on Al for Resilient Happy Society.
+Admin Dashboard |JavaScript, HTML, CSS, Tailwind CSS, Hugo November 2024
+•Developed a responsive and user-friendly admin dashboard template using Tailwind CSS , supporting CRUD operations, modals, and widgets
+for seamless data management.
+•Integrated 10 advanced components such as charts, tables, and drawers, enhancing data visualization and interactivity across multiple pages.
+CERTIFICATIONS
+•Machine Learning byAndrew NG - Coursera, authorized by Stanford University.
+•AWS Cloud Practitioner Essentials - Amazon Web Services.
+•Algorithmic Toolbox byUniversity of California San Diego - Coursera.
+
+I want you to provide me a cold email template mail which I can send to a recruiter.
+For that try to extract details from specific sections of Resume Text  & it should include the following.
+
+1. Extract Skills - Use it in creating template in a separate paragraph.
+
+2. Template should contain information from work experience as well in a separate paragraph.
+
+3. Template should include why you are a good fit for the particular role.
+
+4. Use internet and search the internet about the company and add in the template (40 words) that why the candidate is inspired by the company's info in a separate paragraph.
+
+5. Add pursuing a degree if graduation done is False, else write completed  graduation: True.
+
+6. Don't include where I find the opportunity.
+
+7. The template should not contain [....] like thing. If possible search on internet.
+
+Also use the below critical information:
+
+1.First name of user: Bhuvan
+
+2. Last Name of user: Thirwani
+
+3. University: SUNY Buffalo
+
+4. Target Company: Google
+
+5. Target role: Software Internship
+
+6. Email: bhuvanth@buffalo.edu
+
+7. Linkedln Profile: https://linkedin.com/dev-hax-codes
+
+8. Phone Number: +1 7171717171
+
+9. Recruiter Name: Katie
+
+10. Graduation Done: False
+
+11. Degree Name: Master of Science
+
+I just want the body of the generated email template in response from your side as I want to use this in an API, so please give me only the body (without subject) in HTML. Please make sure to stick to the first 7 points & use the information from the critical information. 

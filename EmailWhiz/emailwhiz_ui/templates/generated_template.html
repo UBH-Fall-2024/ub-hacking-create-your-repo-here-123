@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmailWhiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="max-w-md w-full bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold text-center mb-6">Welcome to EmailWhiz</h1>
+        
+        <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-bold mb-4">Generated Email Template</h2>
+            
+            {% if template_text %}
+                <div class="p-4 bg-gray-100 rounded">
+                    <p>{{ template_text }}</p>
+                </div>
+            {% elif error %}
+                <p class="text-red-500">{{ error }}</p>
+            {% else %}
+                <p>Loading...</p>
+            {% endif %}
+            
+            <div class="mt-4">
+                <a href="{% url 'list_resumes' %}" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Back to Resume List</a>
+                <a href="{% url 'send_email' %}" class="bg-green-500 text-white py-2 px-4 ml-4 rounded hover:bg-green-600">Send Email</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
