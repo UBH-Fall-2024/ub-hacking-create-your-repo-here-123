@@ -6,6 +6,7 @@
     <title>Register</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Register</h2>
@@ -26,6 +27,14 @@
                 <input type="text" name="first_name" id="first_name"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value="{{ form.first_name.value|default:'' }}">
+
+                {% if form.first_name.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.first_name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
 
             <div>
@@ -33,6 +42,29 @@
                 <input type="text" name="last_name" id="last_name"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value="{{ form.last_name.value|default:'' }}">
+
+                {% if form.last_name.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.last_name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="email" class="block text-gray-700 font-semibold">Email</label>
+                <input type="email" name="email" id="email"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value="{{ form.email.value|default:'' }}">
+                {% if form.email.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.email.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
             </div>
 
             <div>
@@ -40,6 +72,15 @@
                 <input type="text" name="phone_number" id="phone_number"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value="{{ form.phone_number.value|default:'' }}">
+
+                {% if form.phone_number.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.phone_number.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
             </div>
 
             <div>
@@ -47,6 +88,37 @@
                 <input type="url" name="linkedin_url" id="linkedin_url"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value="{{ form.linkedin_url.value|default:'' }}">
+
+                {% if form.linkedin_url.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.linkedin_url.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div>
+                <label for="graduated_or_not" class="block text-gray-700 font-semibold">Graduated</label>
+                <select name="graduated_or_not" id="graduated_or_not" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="no" {% if form.graduated_or_not.value == 'no' %}selected{% endif %}>No</option>
+                    <option value="yes" {% if form.graduated_or_not.value == 'yes' %}selected{% endif %}>Yes</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="college" class="block text-gray-700 font-semibold">College</label>
+                <input type="text" name="college" id="college"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value="{{ form.college.value|default:'' }}">
+                {% if form.college.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.college.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
 
             <div>
@@ -54,20 +126,50 @@
                 <input type="text" name="username" id="username"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value="{{ form.username.value|default:'' }}">
+
+                {% if form.username.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.username.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
             </div>
 
             <div>
                 <label for="password1" class="block text-gray-700 font-semibold">Password</label>
                 <input type="password" name="password1" id="password1"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value="{{ form.password1.value|default:'' }}">
+
+         
+<!--                     value="{{ form.password1.value|default:'' }}"> -->
+
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                {% if form.password1.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.password1.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
             </div>
 
             <div>
                 <label for="password2" class="block text-gray-700 font-semibold">Confirm Password</label>
                 <input type="password" name="password2" id="password2"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value="{{ form.password2.value|default:'' }}">
+
+<!--                     value="{{ form.password2.value|default:'' }}"> -->
+
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                {% if form.password2.errors %}
+                    <div class="text-red-500 text-sm mt-1">
+                        {% for error in form.password2.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
             </div>
 
             <button type="submit"

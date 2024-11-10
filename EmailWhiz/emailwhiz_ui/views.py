@@ -1,3 +1,4 @@
+
 # EmailWhiz/emailwhiz_ui/views.py
 from django.shortcuts import redirect, render
 from django.conf import settings
@@ -12,6 +13,14 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 
 from emailwhiz_ui.forms import CustomUserCreationForm
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+import json
+from emailwhiz_ui.forms import CustomUserCreationForm
+
 
 def view_user_details(request):
     details = {
@@ -88,6 +97,7 @@ def generate_template(request):
         return redirect('list_resumes')
 
 
+
 def add_resume(request):
     return render(request, 'add_resume.html')
 
@@ -108,10 +118,18 @@ def register_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            # Redirect to the login page after successful registration
-            return redirect('login')  # Assuming 'login' is the name of your login URL
+            messages.success(request, "Registration successful! Please log in.")
+            return redirect('login')  # Redirect to the login page after successful registration
         else:
+            # Display error messages if form is not valid
+            messages.error(request, "Please fix the errors below.")
             return render(request, 'register.html', {'form': form})
     else:
-        form = CustomUserCreationForm()
+        form = CustomUserCreationForm()  # Instantiate an empty form for GET request
     return render(request, 'register.html', {'form': form})
+
+def add_employer_details(request):
+    # body = json.loads(request.body)
+    body = {"resume": "abcd"}
+    return render(request, 'email_generator.html', body)
+
