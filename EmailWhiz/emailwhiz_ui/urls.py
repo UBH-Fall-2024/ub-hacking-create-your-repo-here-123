@@ -10,6 +10,7 @@ urlpatterns = [
     path('view_user_details/', views.view_user_details, name='view_user_details'),
     path('list-resumes/', views.list_resumes, name='list_resumes'),
     path('suggestions-view/', views.suggestions_view, name='suggestions_view'),
+    path('email-generator/', views.email_generator, name='email_generator'),
     
     path('select-template/', views.select_template, name='select_template'),
     path('upload-excel/', views.upload_excel, name='upload_excel'),

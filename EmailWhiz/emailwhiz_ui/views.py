@@ -9,7 +9,7 @@ import os
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth.models import User
 
 from emailwhiz_api.views import get_user_details
@@ -33,6 +33,32 @@ def suggestions_view(request):
     ]
     
     return render(request, 'suggestions.html', {'suggestions': suggestions})
+
+def add_employer_details(request):
+    resume = request.GET.get('resume')
+    if not resume:
+        # If the parameter is missing, return a 400 Bad Request response
+        return HttpResponseBadRequest('Missing required query parameter: param1')
+
+    body = {"resume": resume}
+    return render(request, 'email_generator.html', body)
+
+
+def view_generated_emails(request, data):
+    # body = json.loads(request.body)
+    # print(data)
+    body = {
+        "data": [{
+            "first_name": "firstName",
+            "last_name": "lastName",
+            "email": "email",
+            "company": "company",
+            "job_role": "jobRole",
+            "email_content": "email_content"
+        },
+        ]
+    }
+    return render(request, 'view_generated_emails.html', body)
 
 def view_user_details(request):
     details = get_user_details(request.user)
@@ -101,14 +127,10 @@ def preview_template(request, user):
     })
 
 
-def generate_template(request):
-    if request.method == 'POST':
-        # (Your existing code to generate the template text)
-        template_text = "Your generated email template content here"  # Example content
-
-        return render(request, 'emailwhiz_ui/generated_template.html', {'template_text': template_text})
-    else:
-        return redirect('list_resumes')
+def email_generator(request):
+    resume = request.POST.get('selected_resume')
+    return render(request, 'email_generator.html', {"resume":resume})
+    
 
 
 
