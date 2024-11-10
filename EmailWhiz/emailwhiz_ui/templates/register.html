@@ -27,6 +27,7 @@
                 <input type="text" name="first_name" id="first_name"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value="{{ form.first_name.value|default:'' }}">
+
                 {% if form.first_name.errors %}
                     <div class="text-red-500 text-sm mt-1">
                         {% for error in form.first_name.errors %}
@@ -41,6 +42,7 @@
                 <input type="text" name="last_name" id="last_name"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value="{{ form.last_name.value|default:'' }}">
+
                 {% if form.last_name.errors %}
                     <div class="text-red-500 text-sm mt-1">
                         {% for error in form.last_name.errors %}
@@ -62,6 +64,7 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+
             </div>
 
             <div>
@@ -69,6 +72,7 @@
                 <input type="text" name="phone_number" id="phone_number"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value="{{ form.phone_number.value|default:'' }}">
+
                 {% if form.phone_number.errors %}
                     <div class="text-red-500 text-sm mt-1">
                         {% for error in form.phone_number.errors %}
@@ -76,6 +80,7 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+
             </div>
 
             <div>
@@ -83,6 +88,7 @@
                 <input type="url" name="linkedin_url" id="linkedin_url"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value="{{ form.linkedin_url.value|default:'' }}">
+
                 {% if form.linkedin_url.errors %}
                     <div class="text-red-500 text-sm mt-1">
                         {% for error in form.linkedin_url.errors %}
@@ -120,6 +126,7 @@
                 <input type="text" name="username" id="username"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value="{{ form.username.value|default:'' }}">
+
                 {% if form.username.errors %}
                     <div class="text-red-500 text-sm mt-1">
                         {% for error in form.username.errors %}
@@ -127,11 +134,16 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+
             </div>
 
             <div>
                 <label for="password1" class="block text-gray-700 font-semibold">Password</label>
                 <input type="password" name="password1" id="password1"
+
+         
+<!--                     value="{{ form.password1.value|default:'' }}"> -->
+
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 {% if form.password1.errors %}
                     <div class="text-red-500 text-sm mt-1">
@@ -140,11 +152,15 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+
             </div>
 
             <div>
                 <label for="password2" class="block text-gray-700 font-semibold">Confirm Password</label>
                 <input type="password" name="password2" id="password2"
+
+<!--                     value="{{ form.password2.value|default:'' }}"> -->
+
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 {% if form.password2.errors %}
                     <div class="text-red-500 text-sm mt-1">
@@ -153,6 +169,7 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+
             </div>
 
             <button type="submit"
