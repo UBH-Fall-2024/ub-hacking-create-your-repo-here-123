@@ -19,8 +19,8 @@ Instructions:
 - Create virtual environment: python3 -m venv .venv
 - Activate virtual environment: source .venv/bin/activate
 - Install dependencies: pip install -r requirements.txt
-3. To start the server:
+2. To start the server:
 - cd EmailWhiz
 - python manage.py migrate
 - python manage.py runserver
-5. Open 127.0.0.1:8000 on your browser & enjoy.
+3. Open 127.0.0.1:8000 on your browser & enjoy.
