@@ -67,10 +67,6 @@
             {% for resume in resumes %}
                 <li class="flex items-center justify-between bg-gray-100 p-3 rounded-lg">
                     <span>{{ resume }}</span>
-                    <button type="button" onclick="showResumePreview('{{ username }}', '{{ resume }}')" 
-                            class="py-1 px-4 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">
-                        Preview
-                    </button>
                     <input type="radio" name="selected_resume" value="{{ resume }}" required>
                 </li>
             {% endfor %}
