@@ -17,6 +17,12 @@ from django.core.files.storage import FileSystemStorage
 import json
 
 genai.configure(api_key='AIzaSyDwBGdGTwqP05cx5GdvuQeZ-F9whEQr1uA')
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.contrib.auth import get_user_model
+
+CustomUser = get_user_model()
+
 
 # Create the model
 generation_config = {
@@ -85,6 +91,20 @@ def get_template(details):
 
 
 
+def get_user_details(username):
+    user = get_object_or_404(CustomUser, username=username)
+    user_data = {
+        "username": user.username,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'university': user.college,
+        'graduation_done': False if  user.graduated_or_not == 'no' else True,
+        "email": user.email,
+        "linkedin_url": user.linkedin_url,
+        "phone_number": user.phone_number,
+        "degree_name": "Master of Science in Computer Science"
+    }
+    return user_data
 
 
 
@@ -94,10 +114,9 @@ def save_resume(request):
     if request.method == 'POST':
         file_name = request.POST.get('file_name')
         uploaded_file = request.FILES.get('file')
-        details= {}
-        details['email'] = 'bhuvanthirwani@gmail.com'
+        details= get_user_details(request.user)
         if uploaded_file:
-            upload_dir = os.path.join(settings.MEDIA_ROOT, f'{details["email"]}/resumes')
+            upload_dir = os.path.join(settings.MEDIA_ROOT, f'{details["username"]}/resumes')
 
             if not os.path.exists(upload_dir):
                 os.makedirs(upload_dir)
@@ -169,10 +188,11 @@ def preview_template(request, user):
 
 def generate_template(request):
     if request.method == 'POST':
-        user_email = 'bhuvanthirwani@gmail.com'  # Replace with actual user logic
+        details = get_user_details(request.user)
+        username = details['username']
         selected_resume = request.POST.get('selected_resume')
         
-        resume_path = os.path.join(settings.MEDIA_ROOT, user_email, 'resumes', selected_resume)
+        resume_path = os.path.join(settings.MEDIA_ROOT, username, 'resumes', selected_resume)
         print("Resume_PATH: ", resume_path)
         # Extract text from the selected resume
         extracted_text = extract_text_from_pdf(resume_path)
