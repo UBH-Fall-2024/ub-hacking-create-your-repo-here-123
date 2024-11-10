@@ -17,8 +17,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     path('api/', include('emailwhiz_api.urls')),
-    path('generate_template/', views.generate_template, name='generate_template'),
-    path('send_email/', views.send_email, name='send_email'),
     path('ui/', include('emailwhiz_ui.urls')),
     path('', lambda request: redirect('login')),
     path('register/', register_view, name='register')

@@ -9,9 +9,16 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Email Generator</h2>
-        
-        <form id="emailForm">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Email Generator</h2>
+            
+            <a href="{% url 'suggestions_view' %}" id="getSuggestions" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                Get Suggestions
+            </a>
+        </div>
+        <form id="emailForm" method="POST" action="{% url 'email_generator_post' %}">
+            {% csrf_token %}
+            <input type="hidden" name="resume" value="{{resume}}">
             <table class="w-full mb-6">
                 <thead>
                     <tr class="text-left bg-gray-200">
@@ -37,7 +44,7 @@
                 <button type="button" id="addRow" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     Add Row
                 </button>
-                <button type="button" id="generateEmails" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                <button type="submit" id="generateEmails" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                     Generate Emails
                 </button>
             </div>
@@ -63,50 +70,6 @@
             tableBody.appendChild(newRow);
         });
 
-        // Function to collect table data and send it as JSON to the API
-        document.getElementById('generateEmails').addEventListener('click', async function() {
-            const tableBody = document.getElementById('tableBody');
-            const rows = tableBody.querySelectorAll('tr');
-            const data = [];
-
-            rows.forEach(row => {
-                const firstName = row.querySelector('input[name="first_name"]').value;
-                const lastName = row.querySelector('input[name="last_name"]').value;
-                const email = row.querySelector('input[name="email"]').value;
-                const company = row.querySelector('input[name="company"]').value;
-                const jobRole = row.querySelector('input[name="job_role"]').value;
-
-                if (firstName && lastName && email && company && jobRole) {
-                    data.push({
-                        first_name: firstName,
-                        last_name: lastName,
-                        email: email,
-                        company: company,
-                        job_role: jobRole
-                    });
-                }
-            });
-
-            if (data.length === 0) {
-                document.getElementById('message').textContent = 'Please fill out all fields!';
-                document.getElementById('message').className = 'text-red-600';
-                return;
-            }
-            const full_body = {
-                resume : "{{ resume }}",
-                data : data,
-            }
-            const jsonPreviewWindow = window.open('', '_blank');
-            jsonPreviewWindow.document.write(`
-                <html>
-                <head><title>JSON Preview</title></head>
-                <body>
-                    <pre>${JSON.stringify(full_body, null, 4)}</pre>
-                    <button onclick="window.close()" style="background-color: #f87171; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;">Close</button>
-                </body>
-                </html>
-            `);
-        });
     </script>
 </body>
 </html>

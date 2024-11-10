@@ -61,7 +61,7 @@
 <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
     <h2 class="text-xl font-bold mb-4">Select a Resume</h2>
     
-    <form id="resumeForm" action="{% url 'generate_template' %}" method="POST">
+    <form id="resumeForm" action="{% url 'email_generator' %}" method="POST">
         {% csrf_token %}
         <ul class="space-y-4">
             {% for resume in resumes %}

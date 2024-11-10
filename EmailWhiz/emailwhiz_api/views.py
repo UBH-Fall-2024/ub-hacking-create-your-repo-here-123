@@ -1,9 +1,12 @@
 
+import copy
 from django.shortcuts import render
 from django.http import HttpResponse
 from PyPDF2 import PdfReader
 from django.conf import settings
 from django.shortcuts import render, redirect
+
+from emailwhiz_api.email_sender import send_email
 from .forms import ResumeSelectionForm, TemplateSelectionForm
 import os
 
@@ -186,11 +189,14 @@ def preview_template(request, user):
         'excel_data': excel_data,
     })
 
-def generate_template(request):
+def email_generator_post(request):
+    print("Hello")
     if request.method == 'POST':
+
         details = get_user_details(request.user)
+        print("LL: ", details)
         username = details['username']
-        selected_resume = request.POST.get('selected_resume')
+        selected_resume = request.POST.get('resume')
         
         resume_path = os.path.join(settings.MEDIA_ROOT, username, 'resumes', selected_resume)
         print("Resume_PATH: ", resume_path)
@@ -198,18 +204,48 @@ def generate_template(request):
         extracted_text = extract_text_from_pdf(resume_path)
         print("extracted_text: ", extracted_text)
         # Create prompt for Gemini
-        details = {}
+
         details['resume'] = extracted_text
-        prompt = get_template(details)
-        
-        # Call Gemini API
-        response = call_gemini_api(prompt)
-        print("Response: ", response)
-        if response:
-            template_text = response.text
-            return render(request, 'generated_template.html', {'template_text': template_text})
-        else:
-            return render(request, 'generated_template.html', {'error': "Failed to generate template."})
+
+        data = []
+        print(request.POST)
+        rows = len(request.POST.getlist('first_name'))  # Get the number of rows
+        print(rows)
+        resume = request.POST.get('resume')
+
+        for i in range(rows):
+            first_name = request.POST.getlist('first_name')[i]
+            last_name = request.POST.getlist('last_name')[i]
+            recruiter_email = request.POST.getlist('email')[i]
+            target_company = request.POST.getlist('company')[i]
+            target_role = request.POST.getlist('job_role')[i]
+            
+            _details = copy.deepcopy(details)
+            
+            _details['target_company'] = target_company
+            _details['target_role'] = target_role
+            _details['recruiter_email'] = recruiter_email
+            _details['recruiter_name'] = first_name
+
+            emp_data = {
+                'first_name': first_name,
+                'last_name': last_name,
+                'email': recruiter_email,
+                'company': target_company,
+                'job_role': target_role,
+                'resume_path': resume_path
+
+            }
+
+            prompt = get_template(_details)
+            
+            # Call Gemini API
+            response = call_gemini_api(prompt)
+            print("Response: ", response)
+            emp_data['email_content'] = response.text
+            data.append(emp_data)
+
+        return render(request, 'view_generated_emails.html', {'data': data})
     else:
         return redirect('list_resumes')
 
@@ -239,57 +275,29 @@ def call_gemini_api(prompt):
     response = chat_session.send_message(prompt)
     return response
 
-def send_email(request):
-    return "Mail Sent"
 
-def send_bulk_emails(request):
+def send_emails(request):
+    print("123")
     if request.method == 'POST':
-        data = request.POST.get('data')
 
+        data = json.loads(request.body).get('data')
+        
+        print("data", data)
         if not data:
             return JsonResponse({'error': 'No data provided'}, status=400)
 
-        name = request.user.first_name + " " + request.user.last_name
-        sender_email = request.user.email
-        designation = request.POST.get('designation')
-        company_name = request.POST.get('company_name')
+        for employer in data:
+            name = employer['first_name'] 
+            sender_email = employer['email']
+            designation = employer['job_role']
+            company_name = employer['company']
+            message = employer['email_content']
+            resume_path = employer['resume_path']
+            subject = f"[{name}]: Exploring {designation} Roles at {company_name}"
 
-        # Check if required details (designation, company name) are present
-        if not designation or not company_name:
-            return JsonResponse({'error': 'Missing designation or company name'}, status=400)
+            send_email('', '', sender_email, subject, message, resume_path)
 
-        try:
-            # Use json.loads instead of eval for security reasons
-            emails_data = json.loads(data)
-            if not isinstance(emails_data, list):
-                return JsonResponse({'error': 'Invalid data format'}, status=400)
-
-            # Prepare the list of email messages
-            emails = []
-            for email_data in emails_data:
-                email = email_data.get('email')
-                body = email_data.get('body')
-                
-                if email and body:
-                    subject = f"[{name}]: Exploring {designation} Roles at {company_name}"
-                    emails.append((subject, body, sender_email, [email]))
-                else:
-                    return JsonResponse({'error': 'Missing email or body in data'}, status=400)
-
-            # Send the bulk emails using send_mass_mail
-            send_mail(
-                subject=subject,
-                message=body,
-                from_email=sender_email,
-                recipient_list=[email],
-            )
-
-            return JsonResponse({'message': 'Emails sent successfully!'})
-
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON format in data'}, status=400)
-        except Exception as e:
-            return JsonResponse({'error': f'Error processing data: {str(e)}'}, status=400)
-
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+    print("Success")
+    return HttpResponse("success")
+            
 
