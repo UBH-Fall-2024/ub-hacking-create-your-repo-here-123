@@ -49,4 +49,3 @@ class CustomUserCreationForm(UserCreationForm):
             self.add_error('college', 'This field is required when you select "Yes" for graduation.')
 
         return cleaned_data
-

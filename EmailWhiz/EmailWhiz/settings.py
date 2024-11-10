@@ -153,7 +153,7 @@ TEMPLATES = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'emailwhiz_api', 'users')
 
-LOGIN_REDIRECT_URL = '/ui/add_resume/'  # Replace with the URL or named view where you want to redirect users
+LOGIN_REDIRECT_URL = '/ui/home/'  # Replace with the URL or named view where you want to redirect users
 
 
 AUTH_USER_MODEL = 'emailwhiz_ui.CustomUser'

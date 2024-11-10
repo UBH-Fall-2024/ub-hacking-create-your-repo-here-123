@@ -12,6 +12,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 
+from emailwhiz_api.views import get_user_details
 from emailwhiz_ui.forms import CustomUserCreationForm
 
 
@@ -23,37 +24,39 @@ from emailwhiz_ui.forms import CustomUserCreationForm
 
 
 def view_user_details(request):
-    details = {
-        'first_name': 'John',
-        'last_name': 'Doe',
-        'university': 'SUNY Buffalo',
-        'email': 'bhuvanthirwani@gmail.com',
-        'linkedin_profile': 'https://linkedin.com/in/johndoe',
-        'phone_number': '+1234567890',
-        'graduation_done': 'Yes',
-        'degree_name': 'Master of Science in Computer Science'
-    }
-    resumes_dir = os.path.join(settings.BASE_DIR, 'emailwhiz_api', 'users', details['email'], 'resumes')
+    details = get_user_details(request.user)
+    print("Details: ", details)
+    if details['graduation_done'] == True:
+        details['graduation_done'] = 'Yes'
+    else:
+        details['graduation_done'] = 'No'
+    resumes_dir = os.path.join(settings.BASE_DIR, 'emailwhiz_api', 'users', details['username'], 'resumes')
     print("resume_dir: ", resumes_dir, settings.BASE_DIR)
     resumes = [f for f in os.listdir(resumes_dir) if f.endswith('.pdf')]
     print("resumes: ", resumes)
-    return render(request, 'view_user_details.html', {'details': details,  'user_email': details['email'],  'resumes': resumes})
+    return render(request, 'view_user_details.html', {'details': details,  'username': details['username'],  'resumes': resumes})
 
 def home(request):
+    details = get_user_details(request.user)
+    upload_dir = os.path.join(settings.MEDIA_ROOT, f'{details["username"]}/resumes')
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
     return render(request, 'base.html')
 
 def list_resumes(request):
-    user_email = 'bhuvanthirwani@gmail.com'  # Placeholder: Replace with the actual user's email
-    print("user_email:", user_email)
-    resumes_dir = os.path.join(settings.BASE_DIR, 'emailwhiz_api', 'users', user_email, 'resumes')
+    details = get_user_details(request.user)
+    username = details['username']  # Placeholder: Replace with the actual user's email
+    print("username:", username)
+    resumes_dir = os.path.join(settings.BASE_DIR, 'emailwhiz_api', 'users', username, 'resumes')
     print("resume_dir: ", resumes_dir, settings.BASE_DIR)
     resumes = [f for f in os.listdir(resumes_dir) if f.endswith('.pdf')]
     print("resumes: ", resumes)
-    return render(request, 'list_resumes.html', {'resumes': resumes, 'user_email': user_email})
+    return render(request, 'list_resumes.html', {'resumes': resumes, 'username': username})
 
 def select_template(request):
-    user_email = 'bhuvanthirwani@gmail.com'  # Placeholder: Replace with the actual user's email
-    templates_dir = os.path.join(settings.BASE_DIR, 'emailwhiz_api', 'users', user_email, 'templates')
+    details = get_user_details(request.user)
+    username = details['username']
+    templates_dir = os.path.join(settings.BASE_DIR, 'emailwhiz_api', 'users', username, 'templates')
     
     first_email_templates = os.listdir(os.path.join(templates_dir, 'first_email'))
     followup_email_templates = os.listdir(os.path.join(templates_dir, 'followup_email'))
@@ -108,7 +111,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('resume_form')  # Change 'home' to the name of the view or URL where you want to redirect on successful login
+            return redirect('home')  # Change 'home' to the name of the view or URL where you want to redirect on successful login
         else:
             messages.error(request, "Invalid username or password")
     return render(request, 'login.html')
