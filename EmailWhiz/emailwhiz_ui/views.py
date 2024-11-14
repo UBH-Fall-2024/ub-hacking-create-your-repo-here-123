@@ -109,7 +109,7 @@ def select_email_template(request):
                 with open(template_path, 'r') as f:
                     content = f.read()
                 templates.append({
-                    'name': template_file[:-4],  # remove ".txt"
+                    'name': template_file, 
                     'content': content
                 })
 

@@ -29,6 +29,7 @@ CustomUser = get_user_model()
 from dotenv import load_dotenv
 load_dotenv()
 
+
 api_key = os.getenv('API_KEY')
 EMAIL_USERNAME = os.getenv('EMAIL_USERNAME')
 EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
@@ -131,7 +132,9 @@ def get_user_details(username):
         "email": user.email,
         "linkedin_url": user.linkedin_url,
         "phone_number": user.phone_number,
-        "degree_name": "Master of Science in Computer Science"
+        "degree_name": "Master of Science in Computer Science",
+        "gmail_id": user.gmail_id,
+        "gmail_in_app_password": user.gmail_in_app_password
     }
     return user_data
 
@@ -245,11 +248,17 @@ def email_generator_post(request):
     if request.method == 'POST':
 
         details = get_user_details(request.user)
+        api_key = details['api_key']
+
         print("LL: ", details)
         username = details['username']
         selected_resume = request.POST.get('resume')
-        
+        selected_template = request.POST.get('template')
         resume_path = os.path.join(settings.MEDIA_ROOT, username, 'resumes', selected_resume)
+        selected_template = request.POST.get('template')
+        template_path = os.path.join(settings.MEDIA_ROOT, username, 'templates', selected_template)
+        with open(template_path, 'r') as f:
+            content = f.read()
         print("Resume_PATH: ", resume_path)
         # Extract text from the selected resume
         extracted_text = extract_text_from_pdf(resume_path)
@@ -288,10 +297,20 @@ def email_generator_post(request):
 
             }
 
-            prompt = get_template(_details)
-            
+            # prompt = get_template(_details)
+
+            prompt = f"""
+                I want to send a cold email to recruiter, and I want to use your response directly in the API.  I want you to generate an email based on the below template: 
+                {content}
+                employer details are: 
+                first_name: {emp_data['first_name']},
+                email: {emp_data['email']},
+                company: {emp_data['company']},
+                job_role: {emp_data['job_role']}
+                I want you to fill up the values in the boxes []. I just want the body of the generated email template in response from your side as I want to use this in an API, so please give me only the body (without subject) in HTML
+            """            
             # Call Gemini API
-            response = call_gemini_api(prompt)
+            response = call_gemini_api(prompt, api_key)
             print("Response: ", response)
             emp_data['email_content'] = response.text
             data.append(emp_data)
@@ -312,12 +331,13 @@ def extract_text_from_pdf(pdf_path):
 
     return text
 
-def call_gemini_api(prompt):
+def call_gemini_api(prompt, api_key):
     # url = "https://gemini-api-url.com/generate"  # Replace with actual Gemini API endpoint
     # headers = {"Authorization": "Bearer your_gemini_api_key", "Content-Type": "application/json"}
     # data = {"prompt": prompt}
     # return requests.post(url, json=data, headers=headers)
-
+    
+    
     chat_session = model.start_chat(
     history=[
     ]
@@ -330,7 +350,7 @@ def call_gemini_api(prompt):
 def send_emails(request):
     print("123")
     if request.method == 'POST':
-
+        details = get_user_details(request.user)
         data = json.loads(request.body).get('data')
         
         print("data", data)
@@ -345,8 +365,8 @@ def send_emails(request):
             message = employer['email_content']
             resume_path = employer['resume_path']
             subject = f"[{name}]: Exploring {designation} Roles at {company_name}"
-
-            send_email(os.environ['EMAIL_USERNAME'], os.environ['EMAIL_PASSWORD'], sender_email, subject, message, resume_path)
+        
+            send_email(details['gmail_id'], details['gmail_in_app_password'], sender_email, subject, message, resume_path)
 
     print("Success")
     return HttpResponse("success")
