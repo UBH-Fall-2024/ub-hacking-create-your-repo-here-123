@@ -36,6 +36,7 @@ def suggestions_view(request):
 
 def add_employer_details(request):
     resume = request.GET.get('resume')
+    
     if not resume:
         # If the parameter is missing, return a 400 Bad Request response
         return HttpResponseBadRequest('Missing required query parameter: param1')
@@ -82,27 +83,65 @@ def home(request):
 
 def list_resumes(request):
     details = get_user_details(request.user)
+    print("RT: ", request.__dict__)
+    selected_template = request.POST.get('selected_template')
+    
     username = details['username']  # Placeholder: Replace with the actual user's email
     print("username:", username)
     resumes_dir = os.path.join(settings.BASE_DIR, 'emailwhiz_api', 'users', username, 'resumes')
     print("resume_dir: ", resumes_dir, settings.BASE_DIR)
     resumes = [f for f in os.listdir(resumes_dir) if f.endswith('.pdf')]
     print("resumes: ", resumes)
-    return render(request, 'list_resumes.html', {'resumes': resumes, 'username': username})
+    return render(request, 'list_resumes.html', {'resumes': resumes, 'username': username, 'selected_template': selected_template})
 
-def select_template(request):
+def select_email_template(request):
+    # Get the user's username and templates directory
     details = get_user_details(request.user)
     username = details['username']
     templates_dir = os.path.join(settings.BASE_DIR, 'emailwhiz_api', 'users', username, 'templates')
     
-    first_email_templates = os.listdir(os.path.join(templates_dir, 'first_email'))
-    followup_email_templates = os.listdir(os.path.join(templates_dir, 'followup_email'))
+    # Load template names and their content
+    templates = []
+    if os.path.exists(templates_dir):
+        for template_file in os.listdir(templates_dir):
+            if template_file.endswith('.txt'):
+                template_path = os.path.join(templates_dir, template_file)
+                with open(template_path, 'r') as f:
+                    content = f.read()
+                templates.append({
+                    'name': template_file[:-4],  # remove ".txt"
+                    'content': content
+                })
+
+    return render(request, 'select_template.html', {'templates': templates})
+
+def list_templates(request):
+    details = get_user_details(request.user)
+    username = details['username']
+    templates_dir = os.path.join(settings.BASE_DIR, 'emailwhiz_api', 'users', username, 'templates')
+    # Initialize list to hold template details
+    templates = []
+
+    # Loop through each file in the directory
+    for template_file in os.listdir(templates_dir):
+        if template_file.endswith('.txt'):
+            template_path = os.path.join(templates_dir, template_file)
+            with open(template_path, 'r') as file:
+                content = file.read()
+            
+            # Append dictionary with filename and content
+            templates.append({
+                'name': template_file[:-4],  # Removing '.txt' from display name
+                'content': content
+            })
+
+    # Render the list_templates.html with template details
+    return render(request, 'list_templates.html', {'templates': templates, 'username': username})
     
-    context = {
-        'first_email_templates': first_email_templates,
-        'followup_email_templates': followup_email_templates
-    }
-    return render(request, 'emailwhiz_ui/select_template.html', context)
+
+def create_template(request):
+    return render(request, 'create_template.html')
+
 
 
 def upload_excel(request, user):
@@ -129,7 +168,9 @@ def preview_template(request, user):
 
 def email_generator(request):
     resume = request.POST.get('selected_resume')
-    return render(request, 'email_generator.html', {"resume":resume})
+    selected_template = request.POST.get('selected_template')
+    print("OO: ", resume, selected_template)
+    return render(request, 'email_generator.html', {"resume": resume, "template": selected_template})
     
 
 

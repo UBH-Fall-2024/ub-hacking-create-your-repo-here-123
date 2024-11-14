@@ -99,7 +99,25 @@ def get_template(details):
 
 
 
+def create_template_post(request):
+    if request.method == 'POST':
+        template_title = request.POST.get('template_title')
+        template_content = request.POST.get('template_content')
+        details= get_user_details(request.user)
+        upload_dir = os.path.join(settings.MEDIA_ROOT, f'{details["username"]}/templates')
+        if not os.path.exists(upload_dir):
+            os.makedirs(upload_dir)
+        # Define the path for the new template file
+        template_path = os.path.join(upload_dir, f'{template_title}.txt')
+        print("template_path: ", template_path)
+        # Write content to the template file
+        with open(template_path, 'w') as template_file:
+            template_file.write(template_content)
+            print("Hurrah!!")
+        
+        return redirect('home')  # Redirect to home or any success page
 
+    return render(request, 'create_template.html')
 
 
 def get_user_details(username):
@@ -144,6 +162,31 @@ def save_resume(request):
     
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+
+
+# def list_templates(request, user):
+#     print("G1")
+#     user_templates = os.listdir(f"/users/{user}/templates")
+#     if request.method == "POST":
+#         form = ResumeSelectionForm(request.POST, user_resumes=user_templates)
+#         if form.is_valid():
+#             selected_resume = form.cleaned_data['resume']
+#             request.session['selected_resume'] = selected_resume  # Store selection in session
+#             return redirect('select_template', user=user)
+#     else:
+#         form = ResumeSelectionForm(user_resumes=user_templates)
+#     return render(request, 'myapp/list_resumes.html', {'form': form})
+
+def list_templates(request):
+    # Define the user directory where templates are stored
+    user_directory = os.path.join('emailwhiz_api/users', request.user.username, 'templates')
+    
+    # Retrieve list of template files, if the directory exists
+    templates = []
+    if os.path.exists(user_directory):
+        templates = [f for f in os.listdir(user_directory) if f.endswith('.txt')]
+    
+    return render(request, 'list_templates.html', {'templates': templates})
 
 def list_resumes(request, user):
     print("G1")
