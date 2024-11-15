@@ -29,28 +29,6 @@ CustomUser = get_user_model()
 from dotenv import load_dotenv
 load_dotenv()
 
-
-api_key = os.getenv('API_KEY')
-EMAIL_USERNAME = os.getenv('EMAIL_USERNAME')
-EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
-print("Enviroment Variables", os.getenv('API_KEY'), os.environ['EMAIL_USERNAME'], os.environ['EMAIL_PASSWORD'])
-
-genai.configure(api_key=os.environ['API_KEY'])
-# Create the model
-generation_config = {
-  "temperature": 1,
-  "top_p": 0.95,
-  "top_k": 40,
-  "max_output_tokens": 8192,
-  "response_mime_type": "text/plain",
-}
-
-model = genai.GenerativeModel(
-  model_name="gemini-1.5-flash",
-  generation_config=generation_config,
-)
-
-
 def get_template(details):
     template = '''Giving you my text of resume.\n
     {resume} 
@@ -132,7 +110,8 @@ def get_user_details(username):
         "email": user.email,
         "linkedin_url": user.linkedin_url,
         "phone_number": user.phone_number,
-        "degree_name": "Master of Science in Computer Science",
+        "degree_name": user.degree_name,
+        "gemini_api_key": user.gemini_api_key,
         "gmail_id": user.gmail_id,
         "gmail_in_app_password": user.gmail_in_app_password
     }
@@ -248,7 +227,23 @@ def email_generator_post(request):
     if request.method == 'POST':
 
         details = get_user_details(request.user)
-        api_key = details['api_key']
+        gemini_api_key = details['gemini_api_key']
+
+        genai.configure(api_key=gemini_api_key)
+        # Create the model
+        generation_config = {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 40,
+        "max_output_tokens": 8192,
+        "response_mime_type": "text/plain",
+        }
+
+        model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash",
+        generation_config=generation_config,
+        )
+
 
         print("LL: ", details)
         username = details['username']
@@ -310,7 +305,7 @@ def email_generator_post(request):
                 I want you to fill up the values in the boxes []. I just want the body of the generated email template in response from your side as I want to use this in an API, so please give me only the body (without subject) in HTML
             """            
             # Call Gemini API
-            response = call_gemini_api(prompt, api_key)
+            response = call_gemini_api(prompt, model)
             print("Response: ", response)
             emp_data['email_content'] = response.text
             data.append(emp_data)
@@ -331,7 +326,7 @@ def extract_text_from_pdf(pdf_path):
 
     return text
 
-def call_gemini_api(prompt, api_key):
+def call_gemini_api(prompt, model):
     # url = "https://gemini-api-url.com/generate"  # Replace with actual Gemini API endpoint
     # headers = {"Authorization": "Bearer your_gemini_api_key", "Content-Type": "application/json"}
     # data = {"prompt": prompt}
