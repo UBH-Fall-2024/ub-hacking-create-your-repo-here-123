@@ -19,6 +19,7 @@
         <form id="emailForm" method="POST" action="{% url 'email_generator_post' %}">
             {% csrf_token %}
             <input type="hidden" name="resume" value="{{resume}}">
+            <input type="hidden" name="template" value="{{template}}">
             <table class="w-full mb-6">
                 <thead>
                     <tr class="text-left bg-gray-200">

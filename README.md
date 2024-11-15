@@ -15,5 +15,12 @@ Don't remove '' in the EMAIL_PASSWORD & API_KEY field.
 
 Instructions:
 1. Make sure you have all dependencies install.
-2. Go to EmailWhiz folder & type: python manage.py runserver
+- Setup python 3.12
+- Create virtual environment: python3 -m venv .venv
+- Activate virtual environment: source .venv/bin/activate
+- Install dependencies: pip install -r requirements.txt
+2. To start the server:
+- cd EmailWhiz
+- python manage.py migrate
+- python manage.py runserver
 3. Open 127.0.0.1:8000 on your browser & enjoy.
